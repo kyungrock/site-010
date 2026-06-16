@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://site-010.azurestaticapps.net/sitemap.xml
+Sitemap: https://agreeable-forest-0c76fb500.7.azurestaticapps.net/sitemap.xml

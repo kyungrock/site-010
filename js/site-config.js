@@ -1,6 +1,6 @@
 /** Azure Static Web Apps 배포 URL (로컬·다른 호스트는 자동 보정) */
 window.SITE_CONFIG = {
-  baseUrl: "https://site-010.azurestaticapps.net",
+  baseUrl: "https://agreeable-forest-0c76fb500.7.azurestaticapps.net",
   siteName: "전 샤워",
   slug: "site-010",
   defaultDescription:
