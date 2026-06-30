@@ -1,0 +1,20 @@
+{
+  "slug": "site-010",
+  "site_title": "전 샤워",
+  "site_name": "전 샤워",
+  "tagline": "마사지 전 샤워 · 청결 · 혈행 웰니스 정보",
+  "topic": "마사지 전 샤워",
+  "content_focus": "청결·혈행",
+  "blog_category": "마사지상식형",
+  "keywords": "마사지전샤워,마사지,힐링,웰니스,셀프케어",
+  "tone": "친근·실용·정보성",
+  "target_reader": "마사지·웰니스 관심 20-50대",
+  "backlink_angle": "마사지 전 샤워 관련 정보 허브",
+  "host_name": "Azure Static Web Apps",
+  "host_url": "https://azure.microsoft.com/products/app-service/web",
+  "domain": "https://agreeable-forest-0c76fb500.7.azurestaticapps.net",
+  "menu": ["홈", "가이드", "블로그", "팁", "FAQ", "글쓰기"],
+  "emoji": "🚿",
+  "styles_main": "styles.css",
+  "styles_blog": "css/blog.css"
+}

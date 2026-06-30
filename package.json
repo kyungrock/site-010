@@ -1,0 +1,11 @@
+{
+  "name": "site-010-pre-shower",
+  "version": "1.0.0",
+  "private": true,
+  "description": "마사지 전 샤워 — 청결·혈행 웰니스 정보 허브",
+  "scripts": {
+    "start": "npx serve .",
+    "blog:publish": "python scripts/publish_blog.py",
+    "blog:add": "python scripts/publish_blog.py --add blog-draft.json"
+  }
+}

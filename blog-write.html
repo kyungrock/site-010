@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>블로그 글 작성 | 전 샤워</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/blog.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚿</span>
+        <span class="logo-text">마사지 <strong>전 샤워</strong></span>
+      </a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">홈</a>
+        <a href="guide.html" class="nav-link">가이드</a>
+        <a href="blog.html" class="nav-link">블로그</a>
+        <a href="tips.html" class="nav-link">팁</a>
+        <a href="faq.html" class="nav-link">FAQ</a>
+        <a href="blog-write.html" class="nav-link active">글쓰기</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-write-page">
+    <div class="container">
+      <h1>✏️ 블로그 글 작성</h1>
+      <p class="muted">제목·내용을 작성한 뒤 <strong>게시 파일 저장</strong> → PC에서 명령 실행 → GitHub push 하면 사이트에 올라갑니다.</p>
+
+      <div class="blog-write-layout">
+        <form class="blog-form card" id="blogForm" onsubmit="return false;">
+          <label for="postId">글 ID (영문·숫자·하이픈, 비우면 자동)</label>
+          <input type="text" id="postId" placeholder="예: winter-shower-tips">
+
+          <label for="postTitle">제목 *</label>
+          <input type="text" id="postTitle" required placeholder="예: 겨울철 마사지 전 샤워 온도 가이드">
+
+          <label for="postSummary">요약 (목록·검색용, 1~2문장) *</label>
+          <input type="text" id="postSummary" required placeholder="검색 결과에 보이는 짧은 설명">
+
+          <label for="postTags">태그 (쉼표로 구분)</label>
+          <input type="text" id="postTags" placeholder="마사지전샤워, 웰니스, 셀프케어">
+
+          <label for="postAuthor">작성자</label>
+          <input type="text" id="postAuthor" value="전 샤워">
+
+          <label for="postDate">날짜</label>
+          <input type="date" id="postDate">
+
+          <label>본문 HTML *</label>
+          <div class="blog-toolbar">
+            <button type="button" data-wrap="p">문단</button>
+            <button type="button" data-wrap="h2">소제목</button>
+            <button type="button" data-wrap="h3">소소제목</button>
+            <button type="button" data-wrap="strong">굵게</button>
+            <button type="button" data-wrap="ul">목록</button>
+            <button type="button" id="btnToggleLink">링크</button>
+          </div>
+          <div class="blog-link-box" id="linkBox" hidden>
+            <label for="linkUrl">URL</label>
+            <input type="url" id="linkUrl" placeholder="https://gunmacity.com/">
+            <label for="linkText">링크 글자 (비우면 URL 그대로)</label>
+            <input type="text" id="linkText" placeholder="마사지">
+            <label class="blog-link-check">
+              <input type="checkbox" id="linkNewTab" checked> 새 창에서 열기
+            </label>
+            <button type="button" class="blog-btn-secondary" id="btnInsertLink">링크 삽입</button>
+            <button type="button" class="blog-btn-outline" id="btnInsertLinkList">링크 목록(ul)</button>
+          </div>
+          <textarea id="postContent" required placeholder="<p>첫 문단...</p>&#10;<h2>소제목</h2>&#10;<p>내용... <a href=&quot;https://gunmacity.com/&quot;>마사지</a></p>"></textarea>
+
+          <label>
+            <input type="checkbox" id="postPublished" checked> 공개 (체크 해제 시 임시 보관)
+          </label>
+
+          <div class="blog-form-actions">
+            <button type="button" class="blog-btn-primary" id="btnPreview">미리보기</button>
+            <button type="button" class="blog-btn-secondary" id="btnSaveDraft">임시저장</button>
+            <button type="button" class="blog-btn-secondary" id="btnDownloadPost">게시 파일 저장</button>
+            <button type="button" class="blog-btn-outline" id="btnLoadPosts">기존 글 불러오기</button>
+            <button type="button" class="blog-btn-outline" id="btnClear">초기화</button>
+          </div>
+          <div class="blog-status" id="statusBox"></div>
+        </form>
+
+        <div class="card blog-preview" id="previewBox">
+          <h3 style="margin-top:0;">미리보기</h3>
+          <div id="previewContent" class="blog-content muted">왼쪽에서 작성 후 「미리보기」를 누르세요.</div>
+        </div>
+      </div>
+
+      <div class="card blog-help">
+        <h3>📤 게시 방법 (3단계)</h3>
+        <ol>
+          <li>위에서 글 작성 → <strong>게시 파일 저장</strong> 클릭 → <code>blog-draft.json</code> 다운로드 (다운로드 폴더에 저장돼도 됩니다)</li>
+          <li>PowerShell에서 프로젝트 폴더로 이동 후 실행:
+            <pre>cd "d:\경락\커서\site setting\300site\10start"
+python scripts/publish_blog.py --add blog-draft.json</pre>
+            <span class="muted">※ 파일이 다운로드 폴더에만 있어도 자동으로 찾습니다.</span>
+          </li>
+          <li>GitHub에 올리기:
+            <pre>git add data/blog-posts.json blog.html blog/ css/common.css css/blog.css sitemap.xml
+git commit -m "블로그 글 추가"
+git push origin main</pre>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-brand">전 샤워</p>
+      <p class="footer-copy">&copy; 2026 전 샤워. All rights reserved.</p>
+    </div>
+  </footer>
+
+<script>
+(function () {
+  const DRAFT_KEY = "site-010-blog-write-draft";
+  const els = {
+    id: document.getElementById("postId"),
+    title: document.getElementById("postTitle"),
+    summary: document.getElementById("postSummary"),
+    tags: document.getElementById("postTags"),
+    author: document.getElementById("postAuthor"),
+    date: document.getElementById("postDate"),
+    content: document.getElementById("postContent"),
+    published: document.getElementById("postPublished"),
+    preview: document.getElementById("previewContent"),
+    status: document.getElementById("statusBox"),
+  };
+
+  els.date.value = new Date().toISOString().slice(0, 10);
+
+  function slugify(text) {
+    return (text || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^\w\s-가-힣]/g, "")
+      .replace(/[\s_]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 50);
+  }
+
+  function showStatus(msg, ok) {
+    els.status.textContent = msg;
+    els.status.className = "blog-status show " + (ok ? "ok" : "err");
+  }
+
+  function insertAtCursor(text) {
+    const ta = els.content;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    ta.value = ta.value.slice(0, start) + text + ta.value.slice(end);
+    const pos = start + text.length;
+    ta.focus();
+    ta.setSelectionRange(pos, pos);
+  }
+
+  function getPostFromForm() {
+    const tags = els.tags.value.split(",").map((t) => t.trim()).filter(Boolean);
+    let id = els.id.value.trim();
+    if (!id) {
+      id = slugify(els.title.value) || "post-" + Date.now();
+      els.id.value = id;
+    }
+    return {
+      id,
+      title: els.title.value.trim(),
+      summary: els.summary.value.trim(),
+      content: els.content.value.trim(),
+      tags,
+      author: els.author.value.trim() || "전 샤워",
+      date: els.date.value || new Date().toISOString().slice(0, 10),
+      published: els.published.checked,
+    };
+  }
+
+  function fillForm(post) {
+    els.id.value = post.id || "";
+    els.title.value = post.title || "";
+    els.summary.value = post.summary || "";
+    els.tags.value = (post.tags || []).join(", ");
+    els.author.value = post.author || "전 샤워";
+    els.date.value = (post.date || "").slice(0, 10) || new Date().toISOString().slice(0, 10);
+    els.content.value = post.content || "";
+    els.published.checked = post.published !== false;
+  }
+
+  function downloadJson(filename, data) {
+    const blob = new Blob([JSON.stringify(data, null, 2) + "\n"], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  document.getElementById("btnPreview").addEventListener("click", () => {
+    const post = getPostFromForm();
+    if (!post.title || !post.content) {
+      showStatus("제목과 본문을 입력해 주세요.", false);
+      return;
+    }
+    els.preview.innerHTML = "<h2>" + post.title + "</h2><p class='muted'>" + post.summary + "</p>" + post.content;
+    els.preview.classList.remove("muted");
+    showStatus("미리보기를 갱신했습니다.", true);
+  });
+
+  document.getElementById("btnSaveDraft").addEventListener("click", () => {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(getPostFromForm()));
+    showStatus("브라우저에 임시저장했습니다.", true);
+  });
+
+  document.getElementById("btnDownloadPost").addEventListener("click", () => {
+    const post = getPostFromForm();
+    if (!post.title || !post.content) {
+      showStatus("제목과 본문을 입력해 주세요.", false);
+      return;
+    }
+    downloadJson("blog-draft.json", post);
+    showStatus("blog-draft.json 저장됨 → publish_blog.py --add blog-draft.json 실행 후 push", true);
+  });
+
+  document.getElementById("btnLoadPosts").addEventListener("click", async () => {
+    try {
+      const res = await fetch("data/blog-posts.json");
+      if (!res.ok) throw new Error("파일 없음");
+      const data = await res.json();
+      const posts = data.posts || [];
+      if (!posts.length) {
+        showStatus("등록된 글이 없습니다.", false);
+        return;
+      }
+      const titles = posts.map((p, i) => (i + 1) + ". " + p.title).join("\n");
+      const idx = prompt("수정할 글 번호를 입력하세요:\n\n" + titles, "1");
+      const n = parseInt(idx, 10) - 1;
+      if (n >= 0 && n < posts.length) {
+        fillForm(posts[n]);
+        showStatus("「" + posts[n].title + "」 불러옴", true);
+      }
+    } catch (e) {
+      showStatus("기존 글을 불러오지 못했습니다. 로컬에서 열거나 push 후 다시 시도하세요.", false);
+    }
+  });
+
+  document.getElementById("btnClear").addEventListener("click", () => {
+    if (!confirm("작성 중인 내용을 지울까요?")) return;
+    els.id.value = "";
+    els.title.value = "";
+    els.summary.value = "";
+    els.tags.value = "";
+    els.content.value = "";
+    els.date.value = new Date().toISOString().slice(0, 10);
+    els.preview.innerHTML = "왼쪽에서 작성 후 「미리보기」를 누르세요.";
+    els.preview.classList.add("muted");
+    localStorage.removeItem(DRAFT_KEY);
+    showStatus("초기화했습니다.", true);
+  });
+
+  document.querySelectorAll(".blog-toolbar button[data-wrap]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tag = btn.dataset.wrap;
+      const ta = els.content;
+      const start = ta.selectionStart;
+      const end = ta.selectionEnd;
+      const sel = ta.value.slice(start, end) || "내용";
+      let insert = "";
+      if (tag === "p") insert = "<p>" + sel + "</p>";
+      else if (tag === "h2") insert = "<h2>" + sel + "</h2>";
+      else if (tag === "h3") insert = "<h3>" + sel + "</h3>";
+      else if (tag === "strong") insert = "<strong>" + sel + "</strong>";
+      else if (tag === "ul") insert = "<ul>\n<li>" + sel + "</li>\n<li></li>\n</ul>";
+      insertAtCursor(insert);
+    });
+  });
+
+  const linkBox = document.getElementById("linkBox");
+  const linkUrl = document.getElementById("linkUrl");
+  const linkText = document.getElementById("linkText");
+  const linkNewTab = document.getElementById("linkNewTab");
+
+  document.getElementById("btnToggleLink").addEventListener("click", () => {
+    linkBox.hidden = !linkBox.hidden;
+    if (!linkBox.hidden) linkUrl.focus();
+  });
+
+  function insertLink(asList) {
+    let url = (linkUrl.value || "").trim();
+    if (!url) {
+      showStatus("URL을 입력해 주세요.", false);
+      linkUrl.focus();
+      return;
+    }
+    if (!/^https?:\/\//i.test(url) && !url.startsWith("/")) url = "https://" + url;
+    const ta = els.content;
+    const sel = ta.value.slice(ta.selectionStart, ta.selectionEnd);
+    const text = (linkText.value || "").trim() || sel || (asList ? "링크" : url);
+    const target = linkNewTab.checked ? ' target="_blank" rel="noopener noreferrer"' : "";
+    const href = url.replace(/"/g, "&quot;");
+    if (asList) {
+      insertAtCursor('<ul>\n  <li><a href="' + href + '"' + target + ">" + text + "</a></li>\n  <li></li>\n</ul>\n");
+    } else {
+      insertAtCursor('<p><a href="' + href + '"' + target + ">" + text + "</a></p>\n");
+    }
+    showStatus("링크를 삽입했습니다.", true);
+    linkUrl.value = "";
+    linkText.value = "";
+  }
+
+  document.getElementById("btnInsertLink").addEventListener("click", () => insertLink(false));
+  document.getElementById("btnInsertLinkList").addEventListener("click", () => insertLink(true));
+
+  const saved = localStorage.getItem(DRAFT_KEY);
+  if (saved) {
+    try {
+      fillForm(JSON.parse(saved));
+      showStatus("이전 임시저장 글을 불러왔습니다.", true);
+    } catch (e) {}
+  }
+})();
+</script>
+</body>
+</html>
