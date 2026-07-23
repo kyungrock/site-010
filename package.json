@@ -4,7 +4,7 @@
   "private": true,
   "description": "마사지 전 샤워 — 청결·혈행 웰니스 정보 허브",
   "scripts": {
-    "build": "echo static-site",
+    "build": "node -e \"require('fs').writeFileSync('.deploy-ok','1')\"",
     "start": "npx serve .",
     "blog:publish": "python scripts/publish_blog.py",
     "blog:add": "python scripts/publish_blog.py --add blog-draft.json"
